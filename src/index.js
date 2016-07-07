@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';//library need just the name of the package
 import YTSearch from 'youtube-api-search';
@@ -31,7 +32,22 @@ class App extends Component {
     //selective video object
 
     // search put into constructor here makes it every time when it opens will do the search for the state
-    YTSearch({key: API_KEY, term:'keyboard'}, (videos) => {//call back function here
+    //YTSearch({key: API_KEY, term:'keyboard'}, (videos) => {//call back function here
+      //console.log(data);
+      //this.setState({ videos: videos });// set state when the new search result comes back
+    //  this.setState({
+    //    videos: videos,
+    //    selectedVideo: videos[0]//makes it to be the first video and rerender the app return
+    //   });// when the key is same as the value, es6 function
+   // })
+  //move the top to the buttom to be able to search for items and call back here
+    this.videoSearch('keyboard'); //pass in search from here
+  }
+
+  //call back for search
+
+  videoSearch(term) {
+    YTSearch({key: API_KEY, term:term}, (videos) => {//call back function here
       //console.log(data);
       //this.setState({ videos: videos });// set state when the new search result comes back
       this.setState({
@@ -45,9 +61,13 @@ class App extends Component {
     //this.props can be access anywhere
     //need to pass from the parent method App to the child VideoList method to display the data
     //like passing the prop to
+    const videoSearch = _.debounce((term) => { this.videoSearch(term) }, 300);
+    //the above which make the real function to be called every 300 mini seconds
+     /*<!--SearchBar onSearchTermChange={term => this.videoSearch(term)}/-->*/
+
     return (
       <div>
-        <SearchBar />
+        <SearchBar onSearchTermChange={videoSearch} />
         <VideoDetail video={this.state.selectedVideo} />
         <VideoList
           onVideoSelect={selectedVideo => this.setState({selectedVideo})}

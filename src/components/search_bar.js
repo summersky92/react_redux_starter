@@ -11,7 +11,7 @@ class SearchBar extends Component {
     // like do some initial variables
     super(props);// super to call from {Component (the parent)} method
 
-    this.state = { term: ''};    //property term/ search term (this.state.term to be the value of string instead on empry string)
+    this.state = { term: '' };    //property term/ search term (this.state.term to be the value of string instead on empry string)
     //term can be renamed here, can use any name else
     //manipulate state in consructor
     //this.state = xxx can only be used here in the consructor, other places need to use the this.setState
@@ -25,10 +25,11 @@ class SearchBar extends Component {
     //value of the input will be : {this.state.term}
     //this.state.term  no need to use the jquery to select the value
     return (
-      <div>
+      <div className="search-bar">
         <input
-        value={this.state.term}//controlled element, change when the state changes
-        onChange={event => this.setState({ term: event.target.value})} />
+          value={this.state.term}//controlled element, change when the state changes
+          //onChange={event => this.setState({ term: event.target.value})} />
+          onChange={event => this.onInputChange(event.target.value)} />//input value pass in here
       </div>
     );
     //(1)input tell the state what it(the state) should be
@@ -40,6 +41,11 @@ class SearchBar extends Component {
     //return <input onChange={(event) => console.log(event.target.value)} />;
     //return <input onChange={this.onInputChange} />  //imp: {} here is to wrap the normal js(this.fucntions), inside the jsx code
     //return <input />;
+  }
+
+  onInputChange(term) {
+    this.setState({term});//set state
+    this.props.onSearchTermChange(term);//fire off the call back to allow index to update the search term change
   }
   //event handler and the function to handle the event
   /*
